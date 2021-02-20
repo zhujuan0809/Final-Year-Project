@@ -1,0 +1,88 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+    <% if(!admin){ %>
+        <%- include('../includes/navigation.ejs') %>
+    <% }else{ %>
+        <%- include('../includes/Adminnavigation.ejs') %>
+        <%} %>
+   
+
+    <main>
+        <% if (errorMessage) { %>
+            <div class="user-message user-message--error"><%= errorMessage %></div>
+        <% } %>
+        <form class="login-form" action="<% if (admin) { %>/admin/edit-profile<% } else { %>/edit-profile<% } %>" method="POST" >
+            <div class="form-control">
+                <label for="email">E-Mail</label>
+                <input 
+                    class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+                    type="email" 
+                    name="email" 
+                    id="email" 
+                    value="<% if (editing || hasError) { %><%= RegisteredUser.email %><% } else{ %><%= oldInput.email %><% }  %>">
+            </div>
+            <div class="form-control">
+                <label for="name">Name</label>
+                <input 
+                    type="text" 
+                    name="name" 
+                    id="name" 
+                    value="<% if (editing || hasError) { %><%= RegisteredUser.name %><% } else{ %><%= oldInput.name %><% }  %>">
+            </div>
+            <div class="form-control">
+                <label for="date">Date</label>
+                <input 
+                    type="date" 
+                    name="date" 
+                    id="date" 
+                    value="<% if (editing || hasError) { %><%= RegisteredUser.birthday %><% } else{ %><%= oldInput.birthday %><% }  %>">
+            </div>
+            <% if(!admin){%>
+            <div class="form-control">
+                <label for="oldpassword">Old Password</label>
+                <input 
+                    class="<%= validationErrors.find(e => e.param === 'oldpassword') ? 'invalid' : '' %>"
+                    type="oldpassword" 
+                    name="oldpassword" 
+                    id="oldpassword" 
+                    value="<%= oldInput.oldpassword %>">
+            </div>
+            <div class="form-control">
+                <label for="password">New Password</label>
+                <input 
+                    class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+                    type="password" 
+                    name="password" 
+                    id="password" 
+                    value="<%= oldInput.password %>">
+            </div>
+            <div class="form-control">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input 
+                    class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
+                    type="password" 
+                    name="confirmPassword" 
+                    id="confirmPassword" 
+                    value="<%= oldInput.confirmPassword %>">
+            </div>
+            <% }else{ %>
+                <div class="form-control">
+                    <label for="password">New Password</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        value="<%= oldInput.password %>">
+                </div>
+                <% } %>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" value="<%= RegisteredUser.id %>" name="userId">
+            <button class="btn" type="submit">Update Details</button>
+        </form>
+    </main>
+<%- include('../includes/end.ejs') %>

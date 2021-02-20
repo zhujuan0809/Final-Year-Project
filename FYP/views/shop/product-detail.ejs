@@ -1,0 +1,45 @@
+<%- include('../includes/head.ejs') %>
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+        <main class="centered">
+            <h1><%= product.title %></h1>
+            <hr>
+            <div class="image">
+                <img src="/<%= product.imageUrl %>" alt="<%= product.title %>">
+            </div>
+            <h2>Event Date: <%= product.date %></h2>
+            <h2>Event Time: <%= product.time %></h2>
+            <h2>Event Venue: <%= product.venue %></h2>
+            <h2>Event Price: RM<%= product.price %></h2>
+            <p>Event Details: <%= product.description %></p>
+            
+            <% if (isAuthenticated) { %>
+                <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+            <% } %>
+            <p class="feedback">
+                Event Feedback: 
+                <form class="product-form" action="/feedback" method="POST">
+                <textarea rows="6" name="feedback" id="feedback"></textarea>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="eventId" value="<%= product._id %>">
+                <input type="hidden" name="userId" value="<%= userId %>">
+                <input type="hidden" name="username" value="<%= username %>">
+                <br>
+                <button class="btn" type="submit">Submit</button>
+            </form>
+        </p>
+        <hr>
+        <% if(feedback.length > 0){ 
+            for(let eventFeedback of feedback) {%>
+                <p><%= eventFeedback.username %></p>
+                
+                <p><%= eventFeedback.feedback %></p>
+                
+            <% } }else{%>
+                <p>No FeedBack</p>
+                <% }%>
+            
+        </main>
+        <%- include('../includes/end.ejs') %>

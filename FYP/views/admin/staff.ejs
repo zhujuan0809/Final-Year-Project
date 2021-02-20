@@ -1,0 +1,41 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+   <%- include('../includes/Adminnavigation.ejs') %>
+
+    <main>
+        <h1>Staff</h1>
+        <% if(staff.length > 0){ %>
+        <table>
+            <tr>
+                <td>StaffNumber</td>
+                <td>StaffName</td>
+                <td>PositionTitle</td>
+                <td>StaffRating</td>
+                <td>Salary</td>
+                <td>Action</td>
+            </tr>
+            <% staff.forEach( s => { %>
+            <tr>
+                <td><%= s.StaffNumber%></td>
+                <td><%= s.StaffName %></td>
+                <td><%= s.PositionTitle%></td>
+                <td><%= s.StaffRating%></td>
+                <td>RM<%= s.Salary%></td>
+                <td><a href="/admin/edit-staff/<%= s._id %>?edit=true ">edit</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    <form action="/admin/delete-staff" method="POST">
+                        <input type="hidden" value="<%= s._id %>" name="staffID">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="submit" value="Delete">
+                    </form></td>
+            </tr>
+            <% }) %>
+        </table>
+        <% }else{ %>
+            <h1>No Staff Found</h1>
+        <% } %>
+    </main>
+<%- include('../includes/end.ejs') %>
